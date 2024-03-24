@@ -21,7 +21,7 @@ RUN <<EOF
     /env/bin/pip install -r /tmp/requirements.dev.txt
   fi
   rm -rf /tmp
-  adduser --no-create-home --disabled-password dev-user
+  adduser --disabled-password --no-create-home dev-user
 EOF
 
 ENV PATH="/env/bin/:$PATH"
