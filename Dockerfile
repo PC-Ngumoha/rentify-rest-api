@@ -21,9 +21,9 @@ RUN <<EOF
     /env/bin/pip install -r /tmp/requirements.dev.txt
   fi
   rm -rf /tmp
-  adduser --disabled-password --no-create-home dev-user
+  adduser --disabled-password --no-create-home django-user
 EOF
 
 ENV PATH="/env/bin/:$PATH"
 
-USER dev-user
+USER django-user
