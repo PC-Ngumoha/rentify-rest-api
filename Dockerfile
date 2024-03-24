@@ -1,30 +1,35 @@
-FROM python:3.9-alpine3.13
+# Stage 1: Dependencies installation
+FROM python:3.11-slim-bookworm AS deps
 LABEL maintainer="pcngumoha"
 
 ENV PYTHONUNBUFFERED 1
 
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
+
+RUN set -x && \
+  python -m venv /py && \
+  /py/bin/pip install --upgrade pip && \
+  /py/bin/pip install -r /tmp/requirements.txt && \
+  /py/bin/pip install -r /tmp/requirements.dev.txt && \
+  rm -rf /tmp
+
+
+# Stage 2: Final setup
+FROM python:3.11-slim-bookworm
+LABEL maintainer="pcngumoha"
+
+ENV PYTHONUNBUFFERED 1
+
+COPY --from=deps /py /py
 COPY ./app /app
 
 WORKDIR /app
 
 EXPOSE 8000
 
-ARG DEV=false
+ENV PATH="/py/bin:$PATH"
 
-RUN <<EOF
-  set -x
-  python -m venv /env
-  /env/bin/pip install --upgrade pip
-  /env/bin/pip install --no-cache-dir -r /tmp/requirements.txt
-  if [ $DEV = "true" ]; then
-    /env/bin/pip install -r /tmp/requirements.dev.txt
-  fi
-  rm -rf /tmp
-  adduser --disabled-password --no-create-home django-user
-EOF
-
-ENV PATH="/env/bin/:$PATH"
+RUN adduser --disabled-password --no-create-home django-user
 
 USER django-user
