@@ -14,6 +14,7 @@ EXPOSE 8000
 ARG DEV=false
 
 RUN <<EOF
+  set -x
   python -m venv /env
   /env/bin/pip install --upgrade pip
   /env/bin/pip install -r /tmp/requirements.txt
