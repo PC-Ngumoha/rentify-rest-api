@@ -13,6 +13,8 @@ EXPOSE 8000
 
 ARG DEV=false
 
+USER root
+
 RUN <<EOF
   set -x
   python -m venv /env
