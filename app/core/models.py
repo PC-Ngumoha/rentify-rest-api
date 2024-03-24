@@ -1,6 +1,2 @@
-from django.db import models
-
-
-# Create your models here.
-class User(models.Model):
-    pass
+# TODO: Implement models
+from django.db import models  # noqa
