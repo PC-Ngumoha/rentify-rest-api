@@ -1,4 +1,4 @@
-FROM python:3.9.19-alpine
+FROM python:3.11-slim-bookworm
 LABEL maintainer="pcngumoha"
 
 ENV PYTHONUNBUFFERED 1
@@ -22,7 +22,7 @@ RUN <<EOF
     /env/bin/pip install -r /tmp/requirements.dev.txt
   fi
   rm -rf /tmp
-  adduser --disabled-password django-user
+  adduser --disabled-password --no-create-home django-user
 EOF
 
 ENV PATH="/env/bin/:$PATH"
