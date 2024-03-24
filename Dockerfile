@@ -13,8 +13,6 @@ EXPOSE 8000
 
 ARG DEV=false
 
-USER root
-
 RUN <<EOF
   set -x
   python -m venv /env
@@ -24,7 +22,7 @@ RUN <<EOF
     /env/bin/pip install -r /tmp/requirements.dev.txt
   fi
   rm -rf /tmp
-  useradd django-user
+  adduser --disabled-password --no-create-home django-user
 EOF
 
 ENV PATH="/env/bin/:$PATH"
