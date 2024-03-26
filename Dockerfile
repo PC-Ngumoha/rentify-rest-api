@@ -7,20 +7,20 @@ ENV PYTHONUNBUFFERED 1
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 
+USER root
+
 RUN set -x && \
-  apt-get update && \
-  apt-get install -y --no-install-recommends \
+  apt update && \
+  apt install -y --no-install-recommends \
   libpq-dev \
+  libpq5 \
   gcc \
-  python3-dev && \
-  rm -rf /var/lib/apt/lists/* && \
+  python3.11-dev && \
   python -m venv /py && \
   /py/bin/pip install --upgrade pip && \
   /py/bin/pip install --no-cache-dir -r /tmp/requirements.txt && \
   /py/bin/pip install --no-cache-dir -r /tmp/requirements.dev.txt && \
-  apt-get purge -y --auto-remove gcc libpq-dev && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/* && \
+  apt purge -y --auto-remove gcc libpq-dev && \
   rm -rf /tmp
 
 
