@@ -14,7 +14,8 @@ services:
       - DB_USER=devUser
       - DB_PASS=Changme
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py await_db &&
+            python manage.py runserver 0.0.0.0:8000"
     depends_on:
       - db
 
