@@ -14,18 +14,23 @@ class CustomUserManager(BaseUserManager):
     """Custom user model manager"""
 
     def create_user(self, email, password=None, **extra):
+        """Create, save & return a new user."""
         if not email:
             raise ValueError(_('Email field is REQUIRED'))
-        user = self.model(email=email, **extra)
+        user = self.model(
+            email=self.normalize_email(email),
+            **extra
+        )
         user.set_password(password)
-        user.save(using=self._db)
+        user.save()
         return user
 
     def create_superuser(self, email, password):
+        """Create, save & return a new superuser."""
         user = self.create_user(email=email, password=password)
         user.is_staff = True
         user.is_superuser = True
-        user.save(using=self._db)
+        user.save()
         return user
 
 
