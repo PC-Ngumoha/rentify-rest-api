@@ -50,3 +50,39 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """String representation"""
         return self.email
+
+
+class Country(models.Model):
+    """Country DB model"""
+    name = models.CharField(unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class PropertyType(models.Model):
+    """Property types"""
+    name = models.CharField(unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Unit(models.Model):
+    """Unit of time for renting properties"""
+    DAY = 'DAY'
+    WEEK = 'WEEK'
+    MONTH = 'MONTH'
+    YEAR = 'YEAR'
+    UNIT_CHOICES = [
+        (DAY, 'Day'),
+        (WEEK, 'Week'),
+        (MONTH, 'Month'),
+        (YEAR, 'Year'),
+    ]
+    name = models.CharField(max_length=20,
+                            choices=UNIT_CHOICES,
+                            default=MONTH)
+
+    def __str__(self):
+        return self.name
