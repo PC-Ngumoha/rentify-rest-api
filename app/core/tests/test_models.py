@@ -10,7 +10,9 @@ from parameterized import parameterized
 from core.models import (
     Country,
     PropertyType,
-    Unit
+    Unit,
+    Amenity,
+    Location
 )
 
 
@@ -61,7 +63,7 @@ class TestModels(TestCase):
             )
         self.assertEqual(Country.objects.all().count(), len(countries))
         country = Country.objects.get(name=countries[0])
-        self.assertEqual(country.name, countries[0])
+        self.assertEqual(country.name, str(country))
 
     def test_country_must_be_unique(self):
         """Tests that an instance of Country must be unique"""
@@ -83,7 +85,7 @@ class TestModels(TestCase):
         self.assertEqual(PropertyType.objects.all().count(),
                          len(property_types))
         property_type = PropertyType.objects.get(name=property_types[0])
-        self.assertEqual(property_type.name, property_types[0])
+        self.assertEqual(property_type.name, str(property_type))
 
     def test_property_type_must_be_unique(self):
         """Tests that all property types added to DB are unique."""
@@ -107,3 +109,37 @@ class TestModels(TestCase):
         """Tests that a unit is set to Month by default when created."""
         unit = Unit.objects.create()
         self.assertEqual(unit.name, Unit.MONTH)
+
+    def test_amenity_db_model(self):
+        """Tests for the Amenity DB model"""
+        amenities = ('Wifi', 'Swimming pool', 'Gym')
+        for amenity_name in amenities:
+            Amenity.objects.create(
+                name=amenity_name
+            )
+        self.assertEqual(Amenity.objects.all().count(), len(amenities))
+        amenity = Amenity.objects.get(name=amenities[0])
+        self.assertEqual(amenity.name, str(amenity))
+
+    def test_amenity_must_be_unique(self):
+        """Tests that instances of the Amenity model must be unique."""
+        Amenity.objects.create(
+            name='Wifi'
+        )
+        with self.assertRaises(IntegrityError):
+            Amenity.objects.create(
+                name='Wifi'
+            )
+
+    def test_location_db_model(self):
+        """Tests the Location DB model"""
+        country = Country.objects.create(name='Nigeria')
+        location_names = ('Ebute Metta', 'Enugu', 'Awka Avenue')
+        for location_name in location_names:
+            Location.objects.create(
+                name=location_name,
+                country=country
+            )
+        self.assertEqual(Location.objects.all().count(), len(location_names))
+        location = Location.objects.get(name=location_names[0])
+        self.assertEqual(location.name, str(location))

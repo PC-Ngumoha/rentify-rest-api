@@ -86,3 +86,21 @@ class Unit(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Amenity(models.Model):
+    """Amenities available at the rented property"""
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Location(models.Model):
+    """Location of the property to be rented"""
+    name = models.CharField(max_length=255)
+    country = models.ForeignKey(Country,
+                                on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
