@@ -1,6 +1,8 @@
 """
 Tests for all the models used in the app.
 """
+from decimal import Decimal
+
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 from django.test import TestCase
@@ -12,7 +14,8 @@ from core.models import (
     PropertyType,
     Unit,
     Amenity,
-    Location
+    Location,
+    Property
 )
 
 
@@ -143,3 +146,31 @@ class TestModels(TestCase):
         self.assertEqual(Location.objects.all().count(), len(location_names))
         location = Location.objects.get(name=location_names[0])
         self.assertEqual(location.name, str(location))
+
+    def test_property_db_model(self):
+        """Tests the Property DB model."""
+        owner = get_user_model().objects.create_user(
+            email='test@example.com',
+            password='testing123',
+            name='Test User'
+        )
+        unit = Unit.objects.create()
+        country = Country.objects.create(name='Nigeria')
+        location = Location.objects.create(
+            name='Test Location, Lagos',
+            country=country
+        )
+        property_type = PropertyType.objects.create(
+            name='Bungalow'
+        )
+        new_property = Property.objects.create(
+            name='Golden Palace',
+            price_per_unit=Decimal('23.45'),
+            owner=owner,
+            unit=unit,
+            location=location,
+            property_type=property_type
+        )
+
+        self.assertTrue(new_property.available)
+        self.assertEqual(new_property.name, str(new_property))

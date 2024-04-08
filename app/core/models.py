@@ -6,6 +6,7 @@ from django.contrib.auth.models import (
   PermissionsMixin,
   BaseUserManager
 )
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -101,6 +102,38 @@ class Location(models.Model):
     name = models.CharField(max_length=255)
     country = models.ForeignKey(Country,
                                 on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+class Property(models.Model):
+    """The property to be rented"""
+    name = models.CharField(max_length=255)
+    price_per_unit = models.DecimalField(max_digits=5, decimal_places=2)
+    available = models.BooleanField(default=True)
+    description = models.TextField(blank=True)
+
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        help_text=_('user that posted the listing.')
+    )
+    location = models.ForeignKey(
+        Location,
+        on_delete=models.CASCADE,
+        help_text=_('current location of the property.')
+    )
+    property_type = models.ForeignKey(
+        PropertyType,
+        on_delete=models.CASCADE,
+        help_text=_('type of apartment being rented')
+    )
+    unit = models.ForeignKey(
+        Unit,
+        on_delete=models.CASCADE,
+        help_text=_('days, weeks, months when property is unavailable.')
+    )
 
     def __str__(self):
         return self.name
