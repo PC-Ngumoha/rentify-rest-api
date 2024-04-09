@@ -12,4 +12,5 @@ urlpatterns = [
        name='property_types'),
   path('countries/', views.CountryListingView.as_view(), name='countries'),
   path('locations/', views.LocationListingView.as_view(), name='locations'),
+  path('amenities/', views.AmenityListingView.as_view(), name='amenities'),
 ]

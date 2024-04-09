@@ -2,16 +2,19 @@
 Contains all the API views for handling listings
 """
 from rest_framework.generics import ListAPIView
+from rest_framework.viewsets import ModelViewSet
 
 from core.models import (
     PropertyType,
     Country,
     Location,
+    Amenity,
 )
 from listing.serializers import (
     PropertyTypeSerializer,
     CountrySerializer,
-    LocationSerializer
+    LocationSerializer,
+    AmenitySerializer,
 )
 
 
@@ -38,3 +41,14 @@ class LocationListingView(ListAPIView):
             country = Country.objects.get(name=country_name.title())
             queryset = queryset.filter(country=country)
         return queryset
+
+
+class AmenityListingView(ListAPIView):
+    """Handles the listing of all amenities available."""
+    queryset = Amenity.objects.all()
+    serializer_class = AmenitySerializer
+
+
+class PropertyViewset(ModelViewSet):
+    """Handles all the actions associated with properties"""
+    pass
